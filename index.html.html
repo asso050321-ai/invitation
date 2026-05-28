@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Wedding — 2026. 10. 15</title>
+  <!-- Google Fonts: Inter (SF Pro 최적의 대체 서체) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* --------------------------------------------------------
+       DESIGN TOKENS & SYSTEM VARIABLES
+    -------------------------------------------------------- */
+    :root {
+      /* Colors */
+      --colors-primary: #0066cc;
+      --colors-primary-focus: #0071e3;
+      --colors-primary-on-dark: #2997ff;
+      --colors-canvas: #ffffff;
+      --colors-canvas-parchment: #f5f5f7;
+      --colors-surface-pearl: #fafafc;
+      --colors-surface-tile-1: #272729;
+      --colors-surface-tile-2: #2a2a2c;
+      --colors-surface-tile-3: #252527;
+      --colors-surface-black: #000000;
+      --colors-ink: #1d1d1f;
+      --colors-body: #1d1d1f;
+      --colors-body-on-dark: #ffffff;
+      --colors-body-muted: #cccccc;
+      --colors-ink-muted-80: #333333;
+      --colors-ink-muted-48: #7a7a7a;
+      --colors-divider-soft: rgba(0, 0, 0, 0.04);
+      --colors-hairline: #e0e0e0;
+
+      /* Spacing */
+      --spacing-xxs: 4px;
+      --spacing-xs: 8px;
+      --spacing-sm: 12px;
+      --spacing-md: 17px;
+      --spacing-lg: 24px;
+      --spacing-xl: 32px;
+      --spacing-xxl: 48px;
+      --spacing-section: 80px;
+
+      /* Border Radius */
+      --rounded-none: 0px;
+      --rounded-sm: 8px;
+      --rounded-md: 11px;
+      --rounded-lg: 18px;
+      --rounded-pill: 9999px;
+      --rounded-full: 50%;
+    }
+
+    /* Base Reset & Typography */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Helvetica Neue", sans-serif;
+      background-color: var(--colors-canvas);
+      color: var(--colors-body);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+      line-height: 1.47;
+    }
+
+    /* --------------------------------------------------------
+       COMPONENTS & LAYOUT STRATEGY
+    -------------------------------------------------------- */
+    
+    /* 1. Global Navigation */
+    .global-nav {
+      background-color: var(--colors-surface-black);
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 var(--spacing-lg);
+      position: relative;
+      z-index: 1000;
+    }
+    .global-nav .logo {
+      color: var(--colors-body-on-dark);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: -0.12px;
+    }
+    .global-nav .nav-links {
+      display: flex;
+      gap: 20px;
+    }
+    .global-nav .nav-links a {
+      color: var(--colors-body-on-dark);
+      font-size: 12px;
+      text-decoration: none;
+      letter-spacing: -0.12px;
+      opacity: 0.8;
+      transition: opacity 0.2s;
+    }
+    .global-nav .nav-links a:hover {
+      opacity: 1;
+    }
+
+    /* 2. Sub Navigation (Frosted Sticky Bar) */
+    .sub-nav-frosted {
+      background-color: rgba(245, 245, 247, 0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 var(--spacing-lg);
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
+    .sub-nav-frosted .nav-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--colors-ink);
+      letter-spacing: 0.231px;
+    }
+    .sub-nav-frosted .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+    }
+
+    /* Universal Buttons */
+    .button-primary {
+      background-color: var(--colors-primary);
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 400;
+      padding: 8px 16px;
+      border-radius: var(--rounded-pill);
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.1s ease, background-color 0.2s;
+    }
+    .button-primary:active {
+      transform: scale(0.95);
+    }
+    .button-primary:focus {
+      outline: 2px solid var(--colors-primary-focus);
+    }
+
+    .button-secondary-pill {
+      background-color: transparent;
+      color: var(--colors-primary);
+      font-size: 17px;
+      font-weight: 400;
+      padding: 11px 22px;
+      border-radius: var(--rounded-pill);
+      border: 1px solid var(--colors-primary);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.1s ease;
+    }
+    .button-secondary-pill:active {
+      transform: scale(0.95);
+    }
+
+    /* 3. Product Tiles (Symmetrical Grid & Fluid Width) */
+    .product-tile {
+      width: 100%;
+      padding: var(--spacing-section) var(--spacing-lg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .tile-light { background-color: var(--colors-canvas); color: var(--colors-ink); }
+    .tile-parchment { background-color: var(--colors-canvas-parchment); color: var(--colors-ink); }
+    .tile-dark { background-color: var(--colors-surface-tile-1); color: var(--colors-body-on-dark); }
+    .tile-dark-2 { background-color: var(--colors-surface-tile-2); color: var(--colors-body-on-dark); }
+
+    /* Apple-Tight Typography Hierarchy */
+    .hero-display {
+      font-size: 56px;
+      font-weight: 600;
+      line-height: 1.07;
+      letter-spacing: -0.02em; /* Apple Tight */
+      margin-bottom: var(--spacing-xs);
+    }
+    .display-lg {
+      font-size: 40px;
+      font-weight: 600;
+      line-height: 1.10;
+      letter-spacing: -0.015em;
+      margin-bottom: var(--spacing-xs);
+    }
+    .tagline {
+      font-size: 21px;
+      font-weight: 600;
+      line-height: 1.19;
+      letter-spacing: 0.01em;
+      margin-bottom: var(--spacing-md);
+    }
+    .lead {
+      font-size: 24px;
+      font-weight: 400;
+      line-height: 1.4;
+      max-width: 600px;
+      margin: 0 auto var(--spacing-lg);
+    }
+    .body-paragraph {
+      font-size: 17px;
+      font-weight: 400;
+      line-height: 1.47;
+      letter-spacing: -0.01em;
+      max-width: 540px;
+      margin: 0 auto var(--spacing-md);
+    }
+
+    .cta-group {
+      display: flex;
+      gap: 15px;
+      margin-bottom: var(--spacing-xxl);
+    }
+
+    /* Product Rendering Depth (Exactly One Drop Shadow Exception) */
+    .product-render-container {
+      width: 100%;
+      max-width: 840px;
+      margin-top: var(--spacing-md);
+    }
+    .product-render {
+      width: 100%;
+      height: auto;
+      border-radius: var(--rounded-none);
+      /* 가이드라인 명세 기반 단 하나의 입체 그림자 토큰 적용 */
+      box-shadow: rgba(0, 0, 0, 0.22) 3px 5px 30px 0px;
+      object-fit: cover;
+    }
+
+    /* 4. Store Utility Grid Layout (오시는길 / 안내 정보 카드) */
+    .store-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--spacing-lg);
+      width: 100%;
+      max-width: 980px;
+      margin: var(--spacing-xl) auto 0;
+      text-align: left;
+    }
+    .store-utility-card {
+      background-color: var(--colors-canvas);
+      border: 1px solid var(--colors-hairline);
+      border-radius: var(--rounded-lg);
+      padding: var(--spacing-lg);
+      display: flex;
+      flex-direction: column;
+    }
+    .card-title {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--colors-ink);
+      margin-bottom: var(--spacing-xs);
+    }
+    .card-body {
+      font-size: 14px;
+      color: var(--colors-ink-muted-80);
+      line-height: 1.5;
+    }
+
+    /* 5. Google Maps Embed Custom Styling (API 프리 교체) */
+    .map-container {
+      width: 100%;
+      max-width: 980px;
+      height: 380px;
+      border-radius: var(--rounded-lg);
+      overflow: hidden;
+      border: 1px solid var(--colors-hairline);
+      margin-top: var(--spacing-xl);
+    }
+    .map-container iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    /* 6. Form/Input Styling (계좌 이체 편의용 치프 구조) */
+    .bank-section {
+      width: 100%;
+      max-width: 540px;
+      margin: var(--spacing-xl) auto 0;
+    }
+    .search-input-like {
+      background-color: var(--colors-canvas);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: var(--rounded-pill);
+      padding: 12px 20px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--spacing-sm);
+    }
+    .search-input-like span {
+      font-size: 14px;
+      color: var(--colors-ink);
+    }
+    .button-pearl-capsule {
+      background-color: var(--colors-surface-pearl);
+      color: var(--colors-primary);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: var(--rounded-md);
+      border: 1px solid var(--colors-hairline);
+      cursor: pointer;
+      transition: transform 0.1s;
+    }
+    .button-pearl-capsule:active {
+      transform: scale(0.95);
+    }
+
+    /* 7. Footer Editorial Architecture */
+    .footer {
+      background-color: var(--colors-canvas-parchment);
+      padding: 64px var(--spacing-lg);
+      border-top: 1px solid var(--colors-hairline);
+    }
+    .footer-inner {
+      max-width: 980px;
+      margin: 0 auto;
+    }
+    .footer-legal {
+      font-size: 12px;
+      color: var(--colors-ink-muted-48);
+      line-height: 1.5;
+      border-bottom: 1px solid var(--colors-hairline);
+      padding-bottom: var(--spacing-lg);
+      margin-bottom: var(--spacing-lg);
+    }
+    .footer-links-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--spacing-lg);
+    }
+    .footer-col-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--colors-ink);
+      margin-bottom: var(--spacing-sm);
+    }
+    .footer-links-grid ul {
+      list-style: none;
+    }
+    .footer-links-grid li {
+      margin-bottom: 8px;
+    }
+    .footer-links-grid a {
+      font-size: 12px;
+      color: var(--colors-ink-muted-80);
+      text-decoration: none;
+    }
+    .footer-links-grid a:hover {
+      text-decoration: underline;
+    }
+
+    /* --------------------------------------------------------
+       RESPONSIVE PATTERNS (BREAKPOINTS)
+    -------------------------------------------------------- */
+    @media (max-width: 833px) {
+      .hero-display { font-size: 40px; }
+      .display-lg { font-size: 32px; }
+      .lead { font-size: 20px; }
+      .store-grid { grid-template-columns: 1fr; }
+      .footer-links-grid { grid-template-columns: 1fr; gap: var(--spacing-xl); }
+    }
+    @media (max-width: 480px) {
+      .hero-display { font-size: 34px; }
+      .display-lg { font-size: 28px; }
+      .product-tile { padding: var(--spacing-xxl) var(--spacing-md); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. GLOBAL NAVIGATION BAR -->
+  <nav class="global-nav">
+    <div class="logo">💍 THE WEDDING</div>
+    <div class="nav-links">
+      <a href="#intro">처음으로</a>
+      <a href="#gallery">갤러리</a>
+      <a href="#location">오시는길</a>
+    </div>
+  </nav>
+
+  <!-- 2. SUB NAVIGATION BAR (STUCK ON SCROLL) -->
+  <div class="sub-nav-frosted">
+    <div class="nav-title">민우 &amp; 지현</div>
+    <div class="nav-actions">
+      <span id="d-day" style="font-size: 14px; font-weight: 600; color: var(--colors-primary);">D-Day</span>
+      <a href="#bank" class="button-primary">마음 전하기</a>
+    </div>
+  </div>
+
+  <!-- SECTION 1: HERO TILE (LIGHT) -->
+  <section id="intro" class="product-tile tile-light">
+    <h1 class="hero-display">민우와 지현.</h1>
+    <p class="tagline">새로운 막이 시작됩니다.</p>
+    <div class="cta-group">
+      <a href="#location" class="button-primary">일정 및 장소 보기</a>
+    </div>
+    <div class="product-render-container">
+      <!-- 메인 스탠딩 이미지 (비율 유지 및 그림자 안착 처리) -->
+      <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=1440" alt="Wedding Hero" class="product-render">
+    </div>
+  </section>
+
+  <!-- SECTION 2: EDITORIAL CONTENT TILE (DARK MODE) -->
+  <section class="product-tile tile-dark">
+    <h2 class="display-lg">서로가 서로에게, 전부.</h2>
+    <p class="tagline" style="color: var(--colors-primary-on-dark);">초대의 글</p>
+    <div class="body-paragraph" style="color: var(--colors-body-on-dark); text-align: center; margin-top: var(--spacing-xl);">
+      다른 환경에서 자란 두 사람이 만났습니다.<br>
+      함께 보낸 계절 속에서 서로에 대한 확신을 얻었고,<br>
+      이제 한 곳을 바라보며 인생의 긴 여정을 시작하려 합니다.<br><br>
+      저희 두 사람의 약속을 완성해 줄 귀한 걸음으로<br>
+      오셔서 축복해 주시면 감사하겠습니다.
+    </div>
+    <p class="body-paragraph" style="color: var(--colors-body-muted); font-size: 15px; margin-top: var(--spacing-lg);">
+      <strong>신랑 이민우 · 신부 김지현</strong> 배상
+    </p>
+  </section>
+
+  <!-- SECTION 3: VISUAL GALLERY TILE (PARCHMENT TEXTURE) -->
+  <section id="gallery" class="product-tile tile-parchment">
+    <h2 class="display-lg">우리가 기록한 순간들.</h2>
+    <p class="lead">순백의 캔버스 위에 담아낸 영원한 조각들.</p>
+    
+    <div class="product-render-container" style="display: flex; flex-direction: column; gap: var(--spacing-xxl);">
+      <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&q=80&w=1000" alt="Gallery 1" class="product-render">
+      <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&q=80&w=1000" alt="Gallery 2" class="product-render">
+    </div>
+  </section>
+
+  <!-- SECTION 4: MAP & DIRECTION UTILITY TILE (LIGHT) -->
+  <section id="location" class="product-tile tile-light">
+    <h2 class="display-lg">오시는 길.</h2>
+    <p class="tagline">2026년 10월 15일 목요일 오후 1시</p>
+    <p class="body-paragraph" style="color: var(--colors-ink-muted-80);">그랜드 인터컨티넨탈 서울 파르나스 그랜드볼룸</p>
+
+    <!-- Google Maps Embed: API 프리 방식으로 주소 기반 정밀 렌더링 -->
+    <div class="map-container">
+      <iframe 
+        src="https://maps.google.com/maps?q=%EA%B7%B8%EB%9E%9D%EB%93%9C%20%EC%9D%B8%ED%84%B0%EC%BB%A8%ED%8B%B0%EB%84%A5%ED%83%88%20%EC%84%9C%EC%9A%B8%20%ED%8C%8C%EB%A5%B4%EB%82%98%EC%8A%A4&t=&z=16&ie=UTF8&iwloc=&output=embed" 
+        allowfullscreen="" 
+        loading="lazy">
+      </iframe>
+    </div>
+
+    <!-- Store-Style Utility Information Cards -->
+    <div class="store-grid">
+      <div class="store-utility-card">
+        <div class="card-title">지하철 안내</div>
+        <div class="card-body">2호선 삼성역 5번, 6번 출구와 직접 연결되어 있어 날씨에 상관없이 쾌적하게 진입 가능합니다.</div>
+      </div>
+      <div class="store-utility-card">
+        <div class="card-title">주차 및 대중교통</div>
+        <div class="card-body">호텔 지하 주차장을 무료로 이용하실 수 있습니다 (하객 전용 3시간 무료 주차권 지급). 영동대로 교통이 혼잡할 수 있으니 대중교통 이용을 권장합니다.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 5: COMPACT CONGREGATION MATRIX (PARCHMENT / INK) -->
+  <section id="bank" class="product-tile tile-parchment">
+    <h2 class="display-lg">마음 전하실 곳.</h2>
+    <p class="lead">축복해 주시는 따뜻한 마음을 소중히 간직하겠습니다.</p>
+
+    <div class="bank-section">
+      <!-- Search Input 패턴을 활용한 정제된 복사 인풋 UI -->
+      <div class="search-input-like">
+        <span>신랑측 신한은행 110-123-456789 (이민우)</span>
+        <button class="button-pearl-capsule" onclick="copyText('110-123-456789')">계좌 복사</button>
+      </div>
+      <div class="search-input-like">
+        <span>신부측 국민은행 9234-5678-12345 (김지현)</span>
+        <button class="button-pearl-capsule" onclick="copyText('9234-5678-12345')">계좌 복사</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. MUSEUM FOOTER ARCHITECTURE -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-legal">
+        본 안내 페이지는 신랑 이민우와 신부 김지현의 결혼식을 위해 Apple의 디자인 원칙 및 웹 사양을 철저히 준수하여 독립적으로 제작되었습니다. 전송된 축하의 마음과 소중한 방문 일정 데이터는 오직 혼인 성사의 기록으로만 기록 및 보존됩니다.
+      </div>
+      <div class="footer-links-grid">
+        <div>
+          <div class="footer-col-title">연락처 및 문의</div>
+          <ul>
+            <li><a href="tel:010-0000-0000">신랑에게 전화하기</a></li>
+            <li><a href="tel:010-0000-0000">신부에게 전화하기</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-col-title">웨딩 정보 요약</div>
+          <ul>
+            <li><a href="#intro">일시: 2026. 10. 15 (목) 13:00</a></li>
+            <li><a href="#location">장소: 인터컨티넨탈 파르나스</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // 계좌 복사 로직 (햅틱 스케일 피드백과 동기화)
+    function copyText(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        alert("계좌번호가 클립보드에 복사되었습니다.");
+      }).catch(err => {
+        console.error('복사에 실패했습니다.', err);
+      });
+    }
+
+    // 2026년 10월 15일 예식 데이터 정밀 카운트다운 연산
+    function calculateDDay() {
+      const targetDate = new Date("2026-10-15T13:00:00+09:00");
+      const today = new Date();
+      const difference = targetDate - today;
+      const days = Math.ceil(difference / (1000 * 60 * 60 * 24));
+      
+      const dDayElement = document.getElementById("d-day");
+      if (days > 0) {
+        dDayElement.innerText = `D-${days}`;
+      } else if (days === 0) {
+        dDayElement.innerText = "D-Day";
+      } else {
+        dDayElement.innerText = `결혼식 종료`;
+      }
+    }
+    
+    calculateDDay();
+  </script>
+</body>
+</html>
